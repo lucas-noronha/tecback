@@ -28,7 +28,10 @@ public class UsuarioService {
     }
 
     public Usuario salvar(Usuario usuario) {
-
+        if (usuario.getPlanoId() != null && usuario.getPlanoId() != 0) {
+            PlanoAssinatura plano = planoService.buscarPorId(usuario.getPlanoId());
+            usuario.setPlano(plano);
+        }
         return repository.save(usuario);
     }
 
@@ -44,6 +47,10 @@ public class UsuarioService {
         if (usuario.getId() == null) {
             throw new RuntimeException("Gênero sem ID");
         }
+        Usuario usuarioBd = repository.findById(usuario.getId()).get();
+        usuario.setCartoes(usuarioBd.getCartoes());
+        usuario.setPlano(usuarioBd.getPlano());
+        usuario.setFilmesFavoritos(usuario.getFilmesFavoritos());
         return repository.save(usuario);
     }
 
@@ -88,7 +95,7 @@ public class UsuarioService {
         Usuario usuario = repository.findById(userId).get();
 
         if (usuario != null && usuario.getCartoes() != null) {
-
+            cartao.setUsuario(usuario);
             usuario.getCartoes().add(cartao);
             salvar(usuario);
         } else if (usuario != null && usuario.getCartoes() == null) {
@@ -116,11 +123,41 @@ public class UsuarioService {
         }
     }
 
-    public Integer ValidarPlay(Integer userId) {
+    public List<Cartao> buscarCartaoPorUsuarioId(Integer userId) {
+        Usuario usuario = repository.findById(userId).get();
+        return usuario.getCartoes();
+    }
+
+    public void editarCartao(Integer userId, Integer cartaoId, Cartao cartao) {
+        Usuario usuario = repository.findById(userId).get();
+        Cartao cartaoUsuario = null;
+
+        for (Cartao el : usuario.getCartoes()) {
+            if (el.getId() == cartaoId) {
+                cartaoUsuario = el;
+            }
+        }
+
+        if (cartaoUsuario != null && cartaoUsuario.getId() == cartao.getId()) {
+            usuario.getCartoes().removeIf(el -> el.getId() == cartaoId);
+            cartao.setUsuario(usuario);
+            usuario.getCartoes().add(cartao);
+            salvar(usuario);
+        }
+
+    }
+
+    public List<Filme> buscarFavoritosDoUsuario(Integer userId) {
+        Usuario usuario = repository.findById(userId).get();
+        return usuario.getFilmesFavoritos();
+    }
+
+    public Integer validarPlay(Integer userId) {
         Usuario usuario = repository.findById(userId).get();
         if (usuario.getPlano() != null) {
             return usuario.getPlano().getQtdeFilmesDiario();
         }
         return 0;
     }
+
 }

@@ -2,6 +2,10 @@ package br.com.fujideia.iesp.tecback.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreType;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -24,6 +28,7 @@ public class Genero {
     private Integer id;
     private String descricao;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "genero", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<Filme> filmesFavoritos;
+    private List<Filme> filmes;
 }

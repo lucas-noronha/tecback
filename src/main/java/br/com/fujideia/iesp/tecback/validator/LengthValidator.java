@@ -3,15 +3,14 @@ package br.com.fujideia.iesp.tecback.validator;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class IdadeRangeValidator
-        implements ConstraintValidator<IdadeRange, Integer> {
-    private int min;
-    private int max;
+public class LengthValidator implements ConstraintValidator<Length, Integer> {
+    private Integer min;
+    private Integer max;
 
     @Override
-    public void initialize(IdadeRange constraint) {
-        this.min = constraint.min();
-        this.max = constraint.max();
+    public void initialize(Length constraint) {
+        min = constraint.min();
+        max = constraint.max();
     }
 
     @Override

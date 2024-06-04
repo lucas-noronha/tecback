@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.fujideia.iesp.tecback.model.PlanoAssinatura;
 import br.com.fujideia.iesp.tecback.service.PlanoAssinaturaService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -22,7 +23,7 @@ public class PlanoController {
     private PlanoAssinaturaService service;
 
     @PostMapping
-    public PlanoAssinatura salvar(@RequestBody PlanoAssinatura entidade) {
+    public PlanoAssinatura salvar(@Valid @RequestBody PlanoAssinatura entidade) {
         return service.salvar(entidade);
     }
 

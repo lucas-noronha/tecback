@@ -30,6 +30,8 @@ public class GeneroService {
         if (genero.getId() == null) {
             throw new RuntimeException("Gênero sem ID");
         }
+        Genero generoBd = buscarPorId(genero.getId());
+        genero.setFilmes(generoBd.getFilmes());
         return repository.save(genero);
     }
 

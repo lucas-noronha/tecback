@@ -8,6 +8,8 @@ import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import br.com.fujideia.iesp.tecback.validator.DataValidade;
+import br.com.fujideia.iesp.tecback.validator.Length;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -24,9 +26,15 @@ public class Cartao {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Length(max = 16)
     private String numero;
+
+    @Length(max = 3)
     private String codigoSeguranca;
     private String nomeTitular;
+
+    @DataValidade
     private Date dataValidade;
 
     @JsonIgnore

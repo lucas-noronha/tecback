@@ -29,6 +29,9 @@ public class PlanoAssinaturaService {
         if (plano.getId() == null) {
             throw new RuntimeException("Gênero sem ID");
         }
+        PlanoAssinatura planoBd = buscarPorId(plano.getId());
+
+        plano.setUsuarios(planoBd.getUsuarios());
         return repository.save(plano);
     }
 

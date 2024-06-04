@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import br.com.fujideia.iesp.tecback.validator.Length;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -36,8 +37,13 @@ public class Usuario {
 
     @Column(unique = true)
     private String email;
+
+    @Length(max = 15)
     private String senha;
+    @Length(max = 15)
     private String confirmarSenha;
+
+    @Length(max = 14)
     private String cpfOuCnpj;
 
     @JsonIgnore

@@ -12,11 +12,13 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
 
 import br.com.fujideia.iesp.tecback.model.Cartao;
+import br.com.fujideia.iesp.tecback.model.Filme;
 import br.com.fujideia.iesp.tecback.model.Usuario;
 import br.com.fujideia.iesp.tecback.service.UsuarioService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @AllArgsConstructor
 @RestController
@@ -26,7 +28,16 @@ public class UsuarioController {
 
     @PostMapping
     public Usuario salvar(@Valid @RequestBody Usuario entidade) {
-        return service.salvar(entidade);
+        try {
+            if (!entidade.getSenha().equals(entidade.getConfirmarSenha())) {
+                throw new Exception("As senhas digitadas não coincidem");
+            }
+            return service.salvar(entidade);
+
+        } catch (Exception e) {
+            return null;
+        }
+
     }
 
     @PutMapping
@@ -41,9 +52,16 @@ public class UsuarioController {
     }
 
     @PutMapping("remover_cartao/{userId}/{cartaoId}")
-    public String adicionarCartaoAoUsuario(@PathVariable Integer userId, @RequestBody Integer cartaoId) {
+    public String removerCartaoAoUsuario(@PathVariable Integer userId, @PathVariable Integer cartaoId) {
         service.removerCartao(userId, cartaoId);
         return "Removido";
+    }
+
+    @PutMapping("editar_cartao/{userId}")
+    public String editarCartao(@PathVariable Integer userId, @RequestBody Cartao entity) {
+
+        service.editarCartao(userId, entity.getId(), entity);
+        return "Alterado";
     }
 
     @PutMapping("adicionar_favoritos/{userId}/{filmeId}")
@@ -63,7 +81,7 @@ public class UsuarioController {
     public String alterarPlano(@PathVariable Integer userId, @PathVariable Integer planoId) {
 
         service.mudarPlano(userId, planoId);
-        return "Removido";
+        return "Alterado";
     }
 
     @GetMapping
@@ -79,6 +97,16 @@ public class UsuarioController {
     @GetMapping("/{id}")
     public Usuario buscarPorId(@PathVariable Integer id) {
         return service.buscarPorId(id);
+    }
+
+    @GetMapping("/cartoes")
+    public List<Cartao> BuscarCartoes(@PathVariable Integer userId) {
+        return service.buscarCartaoPorUsuarioId(userId);
+    }
+
+    @GetMapping("/favoritos/{userId}")
+    public List<Filme> BuscarFavoritos(@PathVariable Integer userId) {
+        return service.buscarFavoritosDoUsuario(userId);
     }
 
     @DeleteMapping("/{id}")
