@@ -8,7 +8,6 @@ public class UnreacheableExternalApiHandler {
 
     @ExceptionHandler(UnreacheableExternalApiException.class)
     public void handleCustomException(UnreacheableExternalApiException ex) {
-        // Lógica de tratamento para a exceção personalizada
         System.err.println("Exceção personalizada capturada: " + ex.getMessage());
     }
 }

@@ -41,14 +41,15 @@ public class LoginController {
 
     private String gerarToken(Usuario user) {
         long expirationTime = 1000 * 60 * 60; // 1 hora
-
+        Date now = new Date();
+        Date expirationDate = new Date(now.getTime() + expirationTime);
         Key key = Keys.hmacShaKeyFor(jwtConfig.getSecret().getBytes());
 
         return Jwts.builder()
-                .setSubject(user.getEmail())
+                .claim("sub", user.getEmail())
                 .claim("nomeCompleto", user.getNomeCompleto())
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
+                .setIssuedAt(new Date()) // Define o horário de emissão do token como o horário atual
+                .setExpiration(expirationDate)
                 .signWith(key)
                 .compact();
     }

@@ -27,7 +27,7 @@ public class PlanoAssinaturaService {
 
     public PlanoAssinatura atualizar(PlanoAssinatura plano) {
         if (plano.getId() == null) {
-            throw new RuntimeException("Gênero sem ID");
+            throw new RuntimeException("Plano sem ID");
         }
         PlanoAssinatura planoBd = buscarPorId(plano.getId());
 
