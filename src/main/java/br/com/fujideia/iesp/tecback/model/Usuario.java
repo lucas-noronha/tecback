@@ -62,4 +62,5 @@ public class Usuario {
 
     @Transient
     private Integer planoId;
+
 }
