@@ -5,6 +5,7 @@ import br.com.fujideia.iesp.tecback.clients.TheMovieDbClient;
 import br.com.fujideia.iesp.tecback.clients.ViaCepClient;
 import br.com.fujideia.iesp.tecback.config.JwtConfig;
 import br.com.fujideia.iesp.tecback.config.MovieApiConfig;
+import br.com.fujideia.iesp.tecback.handler.UnreacheableExternalApiException;
 import br.com.fujideia.iesp.tecback.model.Endereco;
 import lombok.AllArgsConstructor;
 
@@ -30,12 +31,10 @@ public class MovieDbController {
     @GetMapping
     public List<FilmeMovieDb> BuscarMoviesDb() {
 
-        try {
-
-            return moviDbClient.consultarFilmes("Bearer " + movieConfig.getToken()).getResults();
-
-        } catch (Exception e) {
-            throw e;
+        var moviesDb = moviDbClient.consultarFilmes("Bearer " + movieConfig.getToken()).getResults();
+        if (moviesDb == null) {
+            throw new UnreacheableExternalApiException("Api externa não está disponível");
         }
+        return moviesDb;
     }
 }

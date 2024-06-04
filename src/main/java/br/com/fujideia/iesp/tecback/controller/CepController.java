@@ -1,6 +1,7 @@
 package br.com.fujideia.iesp.tecback.controller;
 
 import br.com.fujideia.iesp.tecback.clients.ViaCepClient;
+import br.com.fujideia.iesp.tecback.handler.UnreacheableExternalApiException;
 import br.com.fujideia.iesp.tecback.model.Endereco;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,12 @@ public class CepController {
     private ViaCepClient viaCepClient;
 
     @GetMapping("/{cep}")
-    public Endereco consultaCep(@PathVariable String cep){
-        return viaCepClient.consultaEndereco(cep);
+    public Endereco consultaCep(@PathVariable String cep) {
+
+        var endereco = viaCepClient.consultaEndereco(cep);
+        if (endereco == null) {
+            throw new UnreacheableExternalApiException("Api extena não está disponível");
+        }
+        return endereco;
     }
 }

@@ -53,7 +53,7 @@ public class UsuarioService {
 
     public Usuario atualizar(Usuario usuario) {
         if (usuario.getId() == null) {
-            throw new RuntimeException("Gênero sem ID");
+            throw new RuntimeException("Usuário sem ID");
         }
         Usuario usuarioBd = repository.findById(usuario.getId()).get();
         usuario.setCartoes(usuarioBd.getCartoes());
