@@ -47,6 +47,12 @@ public class Usuario {
     private String cpfOuCnpj;
 
     @JsonIgnore
+    private Boolean emailConfirmado = false;
+
+    @JsonIgnore
+    private Boolean confirmacaoEnviada = false;
+
+    @JsonIgnore
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Cartao> cartoes;
 

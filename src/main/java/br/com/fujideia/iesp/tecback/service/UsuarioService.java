@@ -22,6 +22,7 @@ public class UsuarioService {
     private UsuarioRepository repository;
     private FilmeRepository filmeRepository;
     private PlanoAssinaturaService planoService;
+    private MailService mailService;
 
     public Usuario buscarPorEmail(String email) {
         return repository.findByEmail(email);
@@ -32,7 +33,14 @@ public class UsuarioService {
             PlanoAssinatura plano = planoService.buscarPorId(usuario.getPlanoId());
             usuario.setPlano(plano);
         }
-        return repository.save(usuario);
+        Usuario usuarioSalvo = repository.save(usuario);
+        if (usuarioSalvo.getConfirmacaoEnviada() == false) {
+            mailService.EnviarConfirmacaoEmail(usuarioSalvo.getId(), usuarioSalvo.getNomeCompleto(),
+                    usuarioSalvo.getEmail());
+            usuarioSalvo.setConfirmacaoEnviada(true);
+            repository.save(usuarioSalvo);
+        }
+        return usuarioSalvo;
     }
 
     public List<Usuario> listarTodos() {
@@ -160,4 +168,11 @@ public class UsuarioService {
         return 0;
     }
 
+    public void ConfirmarEmail(Integer userId) {
+        Usuario usuario = repository.findById(userId).get();
+        if (usuario != null) {
+            usuario.setEmailConfirmado(true);
+            salvar(usuario);
+        }
+    }
 }

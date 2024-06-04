@@ -32,7 +32,7 @@ public class MovieDbController {
 
         try {
 
-            return moviDbClient.consultarFilmes(movieConfig.getToken()).getResults();
+            return moviDbClient.consultarFilmes("Bearer " + movieConfig.getToken()).getResults();
 
         } catch (Exception e) {
             throw e;

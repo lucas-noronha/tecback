@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import br.com.fujideia.iesp.tecback.model.Cartao;
 import br.com.fujideia.iesp.tecback.model.Filme;
 import br.com.fujideia.iesp.tecback.model.Usuario;
+import br.com.fujideia.iesp.tecback.service.MailService;
 import br.com.fujideia.iesp.tecback.service.UsuarioService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -32,12 +33,19 @@ public class UsuarioController {
             if (!entidade.getSenha().equals(entidade.getConfirmarSenha())) {
                 throw new Exception("As senhas digitadas não coincidem");
             }
+
             return service.salvar(entidade);
 
         } catch (Exception e) {
             return null;
         }
 
+    }
+
+    @GetMapping("confirmacao/{userId}")
+    public String getMethodName(@PathVariable Integer userId) {
+        service.ConfirmarEmail(userId);
+        return "Email Confirmado!";
     }
 
     @PutMapping
