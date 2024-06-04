@@ -1,5 +1,7 @@
 package br.com.fujideia.iesp.tecback.service;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -22,6 +24,24 @@ public class PlayService {
     public PlayedMovies criar(Integer userId, Integer filmeId) {
         PlayedMovies registro = new PlayedMovies();
         Usuario user = usuarioService.buscarPorId(userId);
+
+        var filmesAssistidos = buscarPorUsuarioId(userId);
+
+        Date hoje = FormatarData(new Date());
+        Integer assistidosHoje = 0;
+
+        for (var el : filmesAssistidos) {
+            Date dataFilme = FormatarData(el.getDataAssistida());
+            if (dataFilme.compareTo(hoje) == 0) {
+                assistidosHoje++;
+            }
+        }
+        if (assistidosHoje > user.getPlano().getQtdeFilmesDiario()) {
+            {
+                return null;
+            }
+        }
+
         Filme filme = filmeService.buscarPorId(filmeId);
 
         if (user != null && filme != null) {
@@ -34,8 +54,17 @@ public class PlayService {
         return null;
     }
 
-    public List<PlayedMovies> BuscarPorUsuarioId(Integer userId) {
+    public List<PlayedMovies> buscarPorUsuarioId(Integer userId) {
         return repository.findByUsuarioId(userId);
+    }
+
+    private Date FormatarData(Date data) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        try {
+            return sdf.parse(sdf.format(data));
+        } catch (Exception e) {
+            return null;
+        }
     }
 
 }

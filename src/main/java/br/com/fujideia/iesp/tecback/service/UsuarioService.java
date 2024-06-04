@@ -118,7 +118,7 @@ public class UsuarioService {
         Usuario usuario = repository.findById(userId).get();
         PlanoAssinatura plano = planoService.buscarPorId(planoId);
         if (plano != null) {
-            usuario.setPlano(plano);
+            usuario.setPlanoId(plano.getId());
             salvar(usuario);
         }
     }

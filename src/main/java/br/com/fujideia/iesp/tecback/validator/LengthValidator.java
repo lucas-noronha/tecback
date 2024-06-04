@@ -3,7 +3,7 @@ package br.com.fujideia.iesp.tecback.validator;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class LengthValidator implements ConstraintValidator<Length, Integer> {
+public class LengthValidator implements ConstraintValidator<Length, String> {
     private Integer min;
     private Integer max;
 
@@ -14,10 +14,10 @@ public class LengthValidator implements ConstraintValidator<Length, Integer> {
     }
 
     @Override
-    public boolean isValid(Integer value, ConstraintValidatorContext constraintValidatorContext) {
+    public boolean isValid(String value, ConstraintValidatorContext constraintValidatorContext) {
         if (value == null) {
             return true;
         }
-        return value >= min && value <= max;
+        return value.length() >= min && value.length() <= max;
     }
 }
